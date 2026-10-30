@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Grid IDS — Login</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<style>
+  #login-shell{ height:100vh; width:100vw; display:flex; align-items:center; justify-content:center; position:relative; z-index:2; }
+  #login-card{
+    width:380px; background:var(--panel-bg); border:1px solid var(--panel-border);
+    border-radius:var(--radius-lg); padding:34px 30px; text-align:center;
+  }
+  #login-card .title{ font-size:16px; font-weight:700; margin-bottom:3px; letter-spacing:-0.01em; }
+  #login-card .subtitle{ margin-bottom:26px; font-size:11px; letter-spacing:0.04em; color:var(--text-secondary); text-transform:uppercase; }
+  .field{ text-align:left; margin-bottom:18px; }
+  .field label{ display:block; font-size:10px; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:7px; text-transform:uppercase; font-weight:500; }
+  .field input[type="text"]{
+    width:100%; background:var(--panel-bg-raised); border:1px solid var(--panel-border);
+    color:var(--text-primary); font-family:var(--font-ui); font-size:13px; padding:11px 12px; border-radius:var(--radius-md);
+  }
+  .field input[type="text"]:focus{ outline:none; border-color:var(--teal-dim); }
+  .role-options{ display:flex; gap:8px; }
+  .role-btn{
+    flex:1; background:var(--panel-bg-raised); border:1px solid var(--panel-border); color:var(--text-secondary);
+    font-family:var(--font-ui); font-size:11px; font-weight:500; padding:11px 6px; border-radius:var(--radius-md);
+    cursor:pointer; transition:all 0.15s;
+  }
+  .role-btn.selected{ border-color:var(--teal-dim); color:var(--teal); background:var(--teal-faint); }
+  #login-btn{
+    width:100%; margin-top:8px; background:var(--teal-faint); border:1px solid var(--teal-dim);
+    color:var(--teal); font-family:var(--font-ui); font-size:12px; font-weight:600;
+    padding:13px; border-radius:var(--radius-md); cursor:pointer; transition:all 0.15s;
+  }
+  #login-btn:hover{ background:rgba(47,217,200,0.18); }
+  #login-error{ color:var(--coral); font-size:10.5px; margin-top:13px; min-height:14px; }
+  #login-note{ font-size:9.5px; color:var(--text-muted); margin-top:22px; line-height:1.7; }
+</style>
+</head>
+<body>
+<div id="grid-overlay"></div>
+
+<div id="login-shell">
+  <div id="login-card">
+    <div class="logo" style="margin-bottom:10px;">MIT Manipal &middot; Cybersecurity Minor Project</div>
+    <div class="title">Smart Grid AI Cybersecurity IDS</div>
+    <div class="subtitle">Operator Console Access</div>
+
+    <div class="field">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="e.g. operator1" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label>Role</label>
+      <div class="role-options">
+        <button type="button" class="role-btn selected" data-role="operator">Operator</button>
+        <button type="button" class="role-btn" data-role="admin">Admin</button>
+      </div>
+    </div>
+
+    <button id="login-btn">Enter console</button>
+    <div id="login-error"></div>
+    <div id="login-note">
+      Demo login only — no password or real authentication.<br>
+      Operator: view every panel, trigger attacks. Admin: also switches models &amp; exports reports.
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedRole = 'operator';
+document.querySelectorAll('.role-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedRole = btn.dataset.role;
+  });
+});
+
+document.getElementById('login-btn').addEventListener('click', doLogin);
+document.getElementById('username').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
+  const username = document.getElementById('username').value.trim();
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  if (!username) {
+    errEl.textContent = 'Please enter a username.';
+    return;
+  }
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, role: selectedRole }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      window.location.href = '/index.html';
+    } else {
+      errEl.textContent = data.reason || 'Login failed.';
+    }
+  } catch (e) {
+    errEl.textContent = 'Could not reach the server.';
+  }
+}
+</script>
+</body>
+</html>

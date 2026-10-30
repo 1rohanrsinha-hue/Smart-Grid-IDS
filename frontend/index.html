@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Grid AI Cybersecurity IDS</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="grid-overlay"></div>
+
+<div id="app">
+
+  <div id="topbar">
+    <div>
+      <div class="logo">MIT Manipal &middot; Cybersecurity Minor Project</div>
+      <div class="title">Smart Grid AI Cybersecurity IDS</div>
+      <div class="subtitle">Real-time intrusion detection with genuinely executing attacks &amp; automated mitigation</div>
+    </div>
+    <div id="topbar-right">
+      <div id="model-badge"><span id="active-model-name">RF</span> model &middot; <span id="model-acc">--</span>% acc &middot; 13 classes</div>
+      <a href="/analytics.html" id="analytics-link">Analytics &rarr;</a>
+      <div id="session-info">
+        <span class="role-tag" id="role-tag">--</span>
+        <span id="username-tag">--</span>
+        <a href="#" id="logout-link">Log out</a>
+      </div>
+      <div id="clock">--:--:--</div>
+    </div>
+  </div>
+
+  <div id="attack-strip" role="alert" aria-live="assertive" hidden>
+    <span id="strip-dot"></span>
+    <span id="strip-text"></span>
+    <span id="strip-extra"></span>
+  </div>
+
+  <div id="main">
+
+    <!-- LEFT COLUMN: telemetry + network -->
+    <div class="col" id="col-left">
+      <div class="panel" id="tel-panel">
+        <div class="panel-title">Grid Telemetry</div>
+
+        <div class="metric-block">
+          <div class="metric-row"><span class="metric-label">Voltage</span></div>
+          <div class="metric-row"><span class="metric-value" id="voltage-val">--</span><span class="metric-unit">V</span></div>
+          <div class="mbar"><div class="mbar-fill" id="voltage-bar"></div></div>
+        </div>
+
+        <div class="metric-block">
+          <div class="metric-row"><span class="metric-label">Frequency</span></div>
+          <div class="metric-row"><span class="metric-value" id="freq-val">--</span><span class="metric-unit">Hz</span></div>
+          <div class="mbar"><div class="mbar-fill" id="freq-bar"></div></div>
+        </div>
+
+        <div class="metric-block">
+          <div class="metric-row"><span class="metric-label">Current</span></div>
+          <div class="metric-row"><span class="metric-value" id="current-val">--</span><span class="metric-unit">A</span></div>
+          <div class="mbar"><div class="mbar-fill" id="current-bar"></div></div>
+        </div>
+
+        <div class="metric-block">
+          <div class="metric-row"><span class="metric-label">Power Factor</span></div>
+          <div class="metric-row"><span class="metric-value" id="pf-val">--</span></div>
+          <div class="mbar"><div class="mbar-fill" id="pf-bar"></div></div>
+        </div>
+      </div>
+
+      <div class="panel" id="net-panel">
+        <div class="panel-title">Network / SCADA</div>
+        <div class="net-row"><span class="net-label">Packets/sec</span><span class="net-value" id="pps-val">--</span></div>
+        <div class="net-row"><span class="net-label">Avg packet size</span><span class="net-value" id="pktsize-val">--</span></div>
+        <div class="net-row"><span class="net-label">Unique IPs</span><span class="net-value" id="ips-val">--</span></div>
+        <div class="net-row"><span class="net-label">Latency</span><span class="net-value" id="latency-val">--</span></div>
+        <div class="net-row"><span class="net-label">Retransmit %</span><span class="net-value" id="retrans-val">--</span></div>
+        <div class="net-row"><span class="net-label">Command rate</span><span class="net-value" id="cmdrate-val">--</span></div>
+        <div class="net-row"><span class="net-label">Unknown commands</span><span class="net-value" id="cmdunk-val">--</span></div>
+        <div class="net-row"><span class="net-label">Auth failures</span><span class="net-value" id="authfail-val">--</span></div>
+        <div class="net-row"><span class="net-label">Privilege level</span><span class="net-value" id="privlvl-val">--</span></div>
+      </div>
+    </div>
+
+    <!-- CENTER COLUMN: status banner + attack stage -->
+    <div class="col" id="col-center">
+      <div class="panel" id="status-banner">
+        <div id="status-line1">Initializing…</div>
+        <div id="status-line2">Booting AI classifier</div>
+        <div id="target-node-row" style="display:none;">Target node: <span id="target-node-name">--</span></div>
+        <div id="mitigation-wrap">
+          <div id="mitigation-bar-bg"><div id="mitigation-bar-fill"></div></div>
+          <div id="mitigation-pct">0%</div>
+        </div>
+      </div>
+
+      <div class="panel" id="stage-panel">
+        <div class="panel-title">
+          Live threat visualization
+          <div id="stage-tabs">
+            <button class="stage-tab-btn active" data-tab="topology">Grid topology</button>
+            <button class="stage-tab-btn" data-tab="detail">Attack detail</button>
+          </div>
+        </div>
+        <div id="stage-canvas-wrap">
+          <div id="stage-label">Monitoring &middot; no active threat</div>
+          <div id="topology-container" class="stage-view"></div>
+          <canvas id="stage-canvas" class="stage-view" style="display:none;"></canvas>
+        </div>
+      </div>
+
+      <div class="panel" id="last-attack-panel" style="display:none;">
+        <div class="panel-title"><span>Last attack timeline</span><span id="last-attack-name"></span></div>
+        <div id="last-timeline" class="timeline"></div>
+      </div>
+
+      <div class="panel" id="live-attack-panel" style="display:none;">
+        <div class="panel-title">
+          <span>Live attack</span>
+          <span class="real-live-badge">Live</span>
+        </div>
+        <div id="la-steps">
+          <div class="la-step" data-step="LAUNCHED"><span class="la-dot"></span>Launched</div>
+          <div class="la-step" data-step="EXECUTING"><span class="la-dot"></span>Executing</div>
+          <div class="la-step" data-step="DETECTED"><span class="la-dot"></span>Detected</div>
+          <div class="la-step" data-step="MITIGATING"><span class="la-dot"></span>Mitigating</div>
+          <div class="la-step" data-step="RESOLVED"><span class="la-dot"></span>Resolved</div>
+        </div>
+        <div id="la-timeline" class="timeline"></div>
+        <div id="la-fix" style="display:none;"><span class="la-fix-label">Fix applied</span><span id="la-fix-text"></span></div>
+
+        <div class="la-section">
+          <div class="la-section-title">Evidence from the attacker: measured live
+            <span id="real-evidence-title"></span></div>
+          <div id="real-evidence-content"></div>
+          <div id="real-evidence-note">
+            Measured live from real code in <code>backend/real_attacks/</code> running against
+            a real local target on 127.0.0.1 &mdash; not generated by a formula.
+          </div>
+        </div>
+
+        <div class="la-section">
+          <div class="la-section-title">What the target device is receiving
+            <span id="la-device-state"></span></div>
+          <div id="la-feed" aria-label="Target device activity feed"></div>
+          <div id="la-verify">
+            <a href="http://127.0.0.1:5101/stats" target="_blank" rel="noopener">Verify on target device &#8599;</a>
+            <span>Counters kept by the target device itself. Refresh while the attack runs to watch them rise. Counters are cumulative since the device started.</span>
+          </div>
+        </div>
+
+        <div class="la-section">
+          <div class="la-section-title">Normal vs now</div>
+          <div id="la-compare"></div>
+        </div>
+      </div>
+
+      <div class="panel" id="scenarios-panel">
+        <div class="panel-title">Attack scenarios (multi-stage)</div>
+        <div id="scenario-cards"><!-- populated by dashboard.js --></div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: AI panel + event log -->
+    <div class="col" id="col-right">
+      <div class="panel" id="ai-panel">
+        <div class="panel-title">AI Classification</div>
+        <div id="attack-box">
+          <div id="attack-type-label">Predicted class</div>
+          <div id="attack-type-value">NORMAL</div>
+          <div class="conf-row"><span class="metric-label">Confidence</span><span class="metric-label" id="conf-pct">--%</span></div>
+          <div class="conf-bar-bg"><div class="conf-fill" id="confidence-fill" style="width:0%"></div></div>
+        </div>
+        <div id="prob-list"></div>
+      </div>
+
+      <div class="panel" id="verdict-panel">
+        <div class="panel-title">ML vs. Rule-Engine Verdict</div>
+        <div class="verdict-row">
+          <span class="verdict-engine">ML model (<span id="verdict-model-name">RF</span>)</span>
+          <span class="verdict-value" id="ml-verdict-value">NORMAL</span>
+        </div>
+        <div class="verdict-row">
+          <span class="verdict-engine">Rule engine</span>
+          <span class="verdict-value" id="rule-verdict-value">NORMAL</span>
+        </div>
+        <div id="rule-reason"></div>
+        <div id="agreement-badge" class="agree">Engines agree</div>
+      </div>
+
+      <div class="panel admin-only" id="model-panel">
+        <div class="panel-title">Detection Model (Admin)</div>
+        <div id="model-select-wrap">
+          <select id="model-select"></select>
+        </div>
+        <div id="model-comparison-mini"></div>
+      </div>
+
+      <div class="panel" id="explain-panel" style="display:none;">
+        <div class="panel-title">Why was this flagged?</div>
+        <div id="explain-content"></div>
+      </div>
+
+      <div class="panel" id="notif-panel">
+        <div class="panel-title">Notifications</div>
+        <div id="notif-entries"><div style="font-size:10.5px;color:var(--text-muted);">No alerts sent yet.</div></div>
+      </div>
+
+      <div class="panel" id="log-panel">
+        <div class="panel-title">Event Log</div>
+        <div id="log-entries"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER: manual control console -->
+  <div id="control-console">
+    <div id="console-header">
+      <div id="console-header-left">
+        <button id="console-toggle-btn" title="Minimize operator console" aria-label="Minimize operator console">
+          <span id="console-toggle-icon">&minus;</span>
+        </button>
+        <div id="control-title">Operator Console</div>
+        <span id="controls-lock-hint" hidden>&#128274; Controls locked: attack in progress</span>
+      </div>
+      <div id="real-code-note">Every attack below executes real code against a real local target</div>
+    </div>
+    <div id="console-body">
+      <select id="node-select">
+        <option value="">Target: random</option>
+      </select>
+      <div id="attack-buttons"><!-- populated by dashboard.js --></div>
+      <div id="auto-toggle-wrap">
+        <span id="auto-label">Auto mode</span>
+        <label class="switch">
+          <input type="checkbox" id="auto-checkbox">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Attack info modal -->
+<div id="info-modal-overlay">
+  <div id="info-modal">
+    <div id="info-modal-header">
+      <div id="info-modal-title">Attack Name</div>
+      <button id="info-modal-close" aria-label="Close">&times;</button>
+    </div>
+    <div id="info-modal-badges"></div>
+    <div id="info-modal-body"></div>
+  </div>
+</div>
+
+<script src="topology.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>

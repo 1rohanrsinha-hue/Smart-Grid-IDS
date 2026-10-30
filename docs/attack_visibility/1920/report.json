@@ -1,0 +1,728 @@
+{
+  "attacks": [
+    {
+      "attack": "DDOS",
+      "node": "SUB2",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 3.149,
+        "DETECTED": 4.143,
+        "MITIGATING": 5.341,
+        "RESOLVED": 4.242
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Requests/sec",
+        "unit": "req/s",
+        "value": 1805.5
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Requests/sec",
+        "unit": "req/s",
+        "value": 1673.5
+      },
+      "eventsBeforeDetected": 12,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "DDOS FLOODRequests/sec: 1,210.5 req/s",
+        "feedFirst": "0.3s agoHTTPHTTP overload: 471 requests rejected (503) in last 0.5s"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [
+        "callout covers a voltage label",
+        "callout covers a voltage label",
+        "callout covers a voltage label"
+      ],
+      "timelineAfter": "Launched+0.0sDetected+3.2sMitigation+7.3sResolved+12.5s"
+    },
+    {
+      "attack": "MITM",
+      "node": "FEEDER1",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 2.964,
+        "DETECTED": 4.178,
+        "MITIGATING": 6.274,
+        "RESOLVED": 4.241
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Added latency",
+        "unit": "ms",
+        "value": 16.49
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Added latency",
+        "unit": "ms",
+        "value": 16.89
+      },
+      "eventsBeforeDetected": 12,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "MAN-IN-THE-MIDDLEAdded latency: 16.44 ms",
+        "feedFirst": "0.3s agoHTTPHTTP flood: 93 requests in last 0.5s"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [
+        "callout covers a voltage label"
+      ],
+      "timelineAfter": "Launched+0.0sDetected+3.1sMitigation+7.3sResolved+13.5s"
+    },
+    {
+      "attack": "REPLAY",
+      "node": "METERS_C",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 3.159,
+        "DETECTED": 4.158,
+        "MITIGATING": 5.085,
+        "RESOLVED": 4.226
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Replays sent",
+        "unit": "pkts",
+        "value": 897
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Replays sent",
+        "unit": "pkts",
+        "value": 3367
+      },
+      "eventsBeforeDetected": 7,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "REPLAY ATTACKReplays sent: 326 pkts",
+        "feedFirst": "0.2s agoHTTPHTTP flood: 139 requests in last 0.5s"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [],
+      "timelineAfter": "Launched+0.0sDetected+3.2sMitigation+7.3sResolved+12.5s"
+    },
+    {
+      "attack": "PORT_SCAN",
+      "node": "SUB1",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 2.976,
+        "DETECTED": 4.168,
+        "MITIGATING": 4.193,
+        "RESOLVED": 4.223
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Open ports found",
+        "unit": "ports",
+        "value": 4
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Open ports found",
+        "unit": "ports",
+        "value": 4
+      },
+      "eventsBeforeDetected": 5,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "NETWORK RECONNAISSANCE / PORT SCANOpen ports found: 4 ports",
+        "feedFirst": "0.0s agoPROBEPort scan: 3 connection probes in last 0.5s across 3 ports"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [],
+      "timelineAfter": "Launched+0.0sDetected+3.2sMitigation+7.3sResolved+11.4s"
+    },
+    {
+      "attack": "FDI",
+      "node": "FEEDER3",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 3.219,
+        "DETECTED": 4.158,
+        "MITIGATING": 5.111,
+        "RESOLVED": 4.236
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Fake voltage accepted",
+        "unit": "V",
+        "value": 226.63
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Fake voltage accepted",
+        "unit": "V",
+        "value": 238.21
+      },
+      "eventsBeforeDetected": 7,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "FALSE DATA INJECTIONFake voltage accepted: 235.52 V",
+        "feedFirst": "0.0s agoHTTPPOST /sensor: 89 readings in last 0.5s (POST /sensor voltage=254.8V freq=50.11Hz)"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [],
+      "timelineAfter": "Launched+0.0sDetected+3.2sMitigation+7.3sResolved+12.5s"
+    },
+    {
+      "attack": "LOAD_ALTER",
+      "node": "METERS_B",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 3.164,
+        "DETECTED": 4.151,
+        "MITIGATING": 6.203,
+        "RESOLVED": 4.26
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Last setpoint",
+        "unit": "",
+        "value": -7.66
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Last setpoint",
+        "unit": "",
+        "value": 42.76
+      },
+      "eventsBeforeDetected": 7,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "LOAD-ALTERING ATTACKLast setpoint: 11.5",
+        "feedFirst": "0.1s agoSETPOINTSETPOINT: 36 changes in last 0.5s (latest: SETPOINT 46.8148 recorded)"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [],
+      "timelineAfter": "Launched+0.0sDetected+3.2sMitigation+7.3sResolved+13.6s"
+    },
+    {
+      "attack": "GPS_SPOOF",
+      "node": "FEEDER2",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 3.188,
+        "DETECTED": 4.165,
+        "MITIGATING": 5.062,
+        "RESOLVED": 4.271
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Clock offset",
+        "unit": "ms",
+        "value": 444.1
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Clock offset",
+        "unit": "ms",
+        "value": 3954.61
+      },
+      "eventsBeforeDetected": 6,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "GPS/TIME-SYNC SPOOFINGClock offset: 529.83 ms",
+        "feedFirst": "0.4s agoTIMESYNCTIMESYNC: 11 messages in last 0.5s (TIMESYNC clock offset 146 ms)"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [],
+      "timelineAfter": "Launched+0.0sDetected+3.1sMitigation+7.3sResolved+12.4s"
+    },
+    {
+      "attack": "CMD_INJECT",
+      "node": "METERS_D",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 2.98,
+        "DETECTED": 4.156,
+        "MITIGATING": 4.208,
+        "RESOLVED": 4.227
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Commands rejected",
+        "unit": "cmds",
+        "value": 473
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Commands rejected",
+        "unit": "cmds",
+        "value": 1688
+      },
+      "eventsBeforeDetected": 6,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "COMMAND INJECTIONCommands rejected: 183 cmds",
+        "feedFirst": "0.2s agoCMDCMD: 79 commands REJECTED in last 0.5s (CMD DISABLE_PROTECTION REJECTED (not on allow-list"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [
+        "callout covers a voltage label",
+        "callout covers a voltage label",
+        "callout covers a voltage label",
+        "callout covers a voltage label"
+      ],
+      "timelineAfter": "Launched+0.0sDetected+3.1sMitigation+7.3sResolved+11.4s"
+    },
+    {
+      "attack": "MALWARE",
+      "node": "PLANT",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 3.198,
+        "DETECTED": 4.169,
+        "MITIGATING": 6.206,
+        "RESOLVED": 4.226
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Bytes uploaded",
+        "unit": "B",
+        "value": 17801000
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Bytes uploaded",
+        "unit": "B",
+        "value": 79272200
+      },
+      "eventsBeforeDetected": 7,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "MALWARE ACTIVITYBytes uploaded: 9,240,000 B",
+        "feedFirst": "0.1s agoHTTPPOST /upload: 2013 uploads, 2,818,200 bytes in last 0.5s"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [],
+      "timelineAfter": "Launched+0.0sDetected+3.2sMitigation+7.3sResolved+13.6s"
+    },
+    {
+      "attack": "FIRMWARE_TAMPER",
+      "node": "CTRL",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 2.966,
+        "DETECTED": 4.151,
+        "MITIGATING": 6.266,
+        "RESOLVED": 4.237
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Hashes match",
+        "unit": "",
+        "value": "NO"
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Hashes match",
+        "unit": "",
+        "value": "YES"
+      },
+      "eventsBeforeDetected": 1,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "FIRMWARE TAMPERINGHashes match: NO",
+        "feedFirst": "1.5s agoFIRMWAREIntegrity check: SHA-256 MISMATCH vs golden (cae9a972de... != 3dd0c4f05d...)"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [],
+      "timelineAfter": "Launched+0.0sDetected+3.1sMitigation+7.3sResolved+13.5s"
+    },
+    {
+      "attack": "JAMMING",
+      "node": "FEEDER4",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 3.151,
+        "DETECTED": 4.158,
+        "MITIGATING": 5.031,
+        "RESOLVED": 4.219
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Packet loss",
+        "unit": "%",
+        "value": 94.6
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Packet loss",
+        "unit": "%",
+        "value": 94.59
+      },
+      "eventsBeforeDetected": 12,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "SENSOR JAMMING (DOS ON SENSORS)Packet loss: 94.61 %",
+        "feedFirst": "0.1s agoUDPUDP flood: 207 datagrams received in last 0.5s"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [],
+      "timelineAfter": "Launched+0.0sDetected+3.1sMitigation+7.2sResolved+12.4s"
+    },
+    {
+      "attack": "PRIV_ESC",
+      "node": "METERS_A",
+      "width": 1920,
+      "seq": [
+        "EXECUTING",
+        "DETECTED",
+        "MITIGATING",
+        "RESOLVED",
+        "NONE"
+      ],
+      "durations": {
+        "EXECUTING": 3.182,
+        "DETECTED": 4.164,
+        "MITIGATING": 5.333,
+        "RESOLVED": 4.257
+      },
+      "metricAtDetected": {
+        "final": false,
+        "label": "Failed logins",
+        "unit": "logins",
+        "value": 40
+      },
+      "metricAtResolved": {
+        "final": true,
+        "label": "Failed logins",
+        "unit": "logins",
+        "value": 152
+      },
+      "eventsBeforeDetected": 12,
+      "execProbe": {
+        "tag": "UNDER ATTACK",
+        "callout": "INSIDER PRIVILEGE ESCALATIONFailed logins: 16 logins",
+        "feedFirst": "0.0s agoLOGINLOGIN admin FAIL: 4 attempts in last 0.5s"
+      },
+      "tabSwitch": {
+        "detailShown": true,
+        "errors": 0,
+        "calloutBack": true,
+        "tagBack": true
+      },
+      "warnings": [],
+      "timelineAfter": "Launched+0.0sDetected+3.1sMitigation+7.3sResolved+12.6s"
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario": "recon_to_breach",
+      "width": 1920,
+      "transitions": [
+        "s1_WAIT",
+        "s1_EXECUTING",
+        "s1_DETECTED",
+        "s1_MITIGATING",
+        "s1_RESOLVED",
+        "s2_WAIT",
+        "s2_EXECUTING",
+        "s2_DETECTED",
+        "s2_MITIGATING",
+        "s2_RESOLVED",
+        "s3_WAIT",
+        "s3_EXECUTING",
+        "s3_DETECTED",
+        "s3_MITIGATING",
+        "s3_RESOLVED"
+      ],
+      "targets": [
+        "FEEDER1"
+      ],
+      "secureFlash": 0,
+      "chipClasses": [
+        "scenario-stage-chip done",
+        "scenario-stage-chip done",
+        "scenario-stage-chip done"
+      ]
+    },
+    {
+      "scenario": "grid_destabilization",
+      "width": 1920,
+      "transitions": [
+        "s1_WAIT",
+        "s1_EXECUTING",
+        "s1_DETECTED",
+        "s1_MITIGATING",
+        "s1_RESOLVED",
+        "s2_WAIT",
+        "s2_EXECUTING",
+        "s2_DETECTED",
+        "s2_MITIGATING",
+        "s2_RESOLVED",
+        "s3_WAIT",
+        "s3_EXECUTING",
+        "s3_DETECTED",
+        "s3_MITIGATING",
+        "s3_RESOLVED"
+      ],
+      "targets": [
+        "CTRL"
+      ],
+      "secureFlash": 0,
+      "chipClasses": [
+        "scenario-stage-chip",
+        "scenario-stage-chip",
+        "scenario-stage-chip"
+      ]
+    },
+    {
+      "scenario": "stealth_takeover",
+      "width": 1920,
+      "transitions": [
+        "s1_WAIT",
+        "s1_EXECUTING",
+        "s1_DETECTED",
+        "s1_MITIGATING",
+        "s1_RESOLVED",
+        "s2_WAIT",
+        "s2_EXECUTING",
+        "s2_DETECTED",
+        "s2_MITIGATING",
+        "s2_RESOLVED",
+        "s3_WAIT",
+        "s3_EXECUTING",
+        "s3_DETECTED",
+        "s3_MITIGATING",
+        "s3_RESOLVED"
+      ],
+      "targets": [
+        "FEEDER4"
+      ],
+      "secureFlash": 0,
+      "chipClasses": [
+        "scenario-stage-chip",
+        "scenario-stage-chip",
+        "scenario-stage-chip"
+      ]
+    }
+  ],
+  "failures": [],
+  "screenshots": [
+    "docs/attack_visibility_full/1920/DDOS_SUB2_EXECUTING.png",
+    "docs/attack_visibility_full/1920/DDOS_SUB2_DETECTED.png",
+    "docs/attack_visibility_full/1920/DDOS_SUB2_MITIGATING.png",
+    "docs/attack_visibility_full/1920/DDOS_SUB2_RESOLVED.png",
+    "docs/attack_visibility_full/1920/MITM_FEEDER1_EXECUTING.png",
+    "docs/attack_visibility_full/1920/MITM_FEEDER1_DETECTED.png",
+    "docs/attack_visibility_full/1920/MITM_FEEDER1_MITIGATING.png",
+    "docs/attack_visibility_full/1920/MITM_FEEDER1_RESOLVED.png",
+    "docs/attack_visibility_full/1920/REPLAY_METERS_C_EXECUTING.png",
+    "docs/attack_visibility_full/1920/REPLAY_METERS_C_DETECTED.png",
+    "docs/attack_visibility_full/1920/REPLAY_METERS_C_MITIGATING.png",
+    "docs/attack_visibility_full/1920/REPLAY_METERS_C_RESOLVED.png",
+    "docs/attack_visibility_full/1920/PORT_SCAN_SUB1_EXECUTING.png",
+    "docs/attack_visibility_full/1920/PORT_SCAN_SUB1_DETECTED.png",
+    "docs/attack_visibility_full/1920/PORT_SCAN_SUB1_MITIGATING.png",
+    "docs/attack_visibility_full/1920/PORT_SCAN_SUB1_RESOLVED.png",
+    "docs/attack_visibility_full/1920/FDI_FEEDER3_EXECUTING.png",
+    "docs/attack_visibility_full/1920/FDI_FEEDER3_DETECTED.png",
+    "docs/attack_visibility_full/1920/FDI_FEEDER3_MITIGATING.png",
+    "docs/attack_visibility_full/1920/FDI_FEEDER3_RESOLVED.png",
+    "docs/attack_visibility_full/1920/LOAD_ALTER_METERS_B_EXECUTING.png",
+    "docs/attack_visibility_full/1920/LOAD_ALTER_METERS_B_DETECTED.png",
+    "docs/attack_visibility_full/1920/LOAD_ALTER_METERS_B_MITIGATING.png",
+    "docs/attack_visibility_full/1920/LOAD_ALTER_METERS_B_RESOLVED.png",
+    "docs/attack_visibility_full/1920/GPS_SPOOF_FEEDER2_EXECUTING.png",
+    "docs/attack_visibility_full/1920/GPS_SPOOF_FEEDER2_DETECTED.png",
+    "docs/attack_visibility_full/1920/GPS_SPOOF_FEEDER2_MITIGATING.png",
+    "docs/attack_visibility_full/1920/GPS_SPOOF_FEEDER2_RESOLVED.png",
+    "docs/attack_visibility_full/1920/CMD_INJECT_METERS_D_EXECUTING.png",
+    "docs/attack_visibility_full/1920/CMD_INJECT_METERS_D_DETECTED.png",
+    "docs/attack_visibility_full/1920/CMD_INJECT_METERS_D_MITIGATING.png",
+    "docs/attack_visibility_full/1920/CMD_INJECT_METERS_D_RESOLVED.png",
+    "docs/attack_visibility_full/1920/MALWARE_PLANT_EXECUTING.png",
+    "docs/attack_visibility_full/1920/MALWARE_PLANT_DETECTED.png",
+    "docs/attack_visibility_full/1920/MALWARE_PLANT_MITIGATING.png",
+    "docs/attack_visibility_full/1920/MALWARE_PLANT_RESOLVED.png",
+    "docs/attack_visibility_full/1920/FIRMWARE_TAMPER_CTRL_EXECUTING.png",
+    "docs/attack_visibility_full/1920/FIRMWARE_TAMPER_CTRL_DETECTED.png",
+    "docs/attack_visibility_full/1920/FIRMWARE_TAMPER_CTRL_MITIGATING.png",
+    "docs/attack_visibility_full/1920/FIRMWARE_TAMPER_CTRL_RESOLVED.png",
+    "docs/attack_visibility_full/1920/JAMMING_FEEDER4_EXECUTING.png",
+    "docs/attack_visibility_full/1920/JAMMING_FEEDER4_DETECTED.png",
+    "docs/attack_visibility_full/1920/JAMMING_FEEDER4_MITIGATING.png",
+    "docs/attack_visibility_full/1920/JAMMING_FEEDER4_RESOLVED.png",
+    "docs/attack_visibility_full/1920/PRIV_ESC_METERS_A_EXECUTING.png",
+    "docs/attack_visibility_full/1920/PRIV_ESC_METERS_A_DETECTED.png",
+    "docs/attack_visibility_full/1920/PRIV_ESC_METERS_A_MITIGATING.png",
+    "docs/attack_visibility_full/1920/PRIV_ESC_METERS_A_RESOLVED.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s1_EXECUTING.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s1_DETECTED.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s1_MITIGATING.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s1_RESOLVED.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s2_WAIT.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s2_EXECUTING.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s2_DETECTED.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s2_MITIGATING.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s2_RESOLVED.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s3_WAIT.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s3_EXECUTING.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s3_DETECTED.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s3_MITIGATING.png",
+    "docs/attack_visibility_full/1920/recon_to_breach_s3_RESOLVED.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s1_EXECUTING.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s1_DETECTED.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s1_MITIGATING.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s1_RESOLVED.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s2_WAIT.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s2_EXECUTING.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s2_DETECTED.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s2_MITIGATING.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s2_RESOLVED.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s3_WAIT.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s3_EXECUTING.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s3_DETECTED.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s3_MITIGATING.png",
+    "docs/attack_visibility_full/1920/grid_destabilization_s3_RESOLVED.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s1_EXECUTING.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s1_DETECTED.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s1_MITIGATING.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s1_RESOLVED.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s2_WAIT.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s2_EXECUTING.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s2_DETECTED.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s2_MITIGATING.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s2_RESOLVED.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s3_WAIT.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s3_EXECUTING.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s3_DETECTED.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s3_MITIGATING.png",
+    "docs/attack_visibility_full/1920/stealth_takeover_s3_RESOLVED.png"
+  ]
+}

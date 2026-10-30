@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Grid IDS - Analytics</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="analytics.css">
+</head>
+<body>
+<div id="grid-overlay"></div>
+<div id="scan-line"></div>
+
+<div id="app">
+  <div id="topbar">
+    <div>
+      <div class="logo">MIT MANIPAL &middot; CYBERSECURITY MINOR PROJECT</div>
+      <div class="title">Historical Analytics &amp; Literature Benchmark</div>
+      <div class="subtitle">Aggregated incident history, model comparison, and viva-ready benchmark table</div>
+    </div>
+    <div id="topbar-right">
+      <a href="/index.html" id="back-link">&larr; Back to dashboard</a>
+      <div id="clock">--:--:--</div>
+    </div>
+  </div>
+
+  <div id="analytics-main">
+
+    <div class="analytics-row">
+      <div class="panel stat-card">
+        <div class="panel-title">Total Incidents</div>
+        <div class="big-stat" id="stat-total">--</div>
+      </div>
+      <div class="panel stat-card">
+        <div class="panel-title">Most Frequent Attack</div>
+        <div class="big-stat small" id="stat-frequent">--</div>
+      </div>
+      <div class="panel stat-card">
+        <div class="panel-title">Avg. ML Confidence</div>
+        <div class="big-stat" id="stat-confidence">--</div>
+      </div>
+      <div class="panel stat-card">
+        <div class="panel-title">ML &harr; Rule Agreement</div>
+        <div class="big-stat" id="stat-agreement">--</div>
+      </div>
+    </div>
+
+    <div class="analytics-row">
+      <div class="panel chart-panel">
+        <div class="panel-title">Incidents by Attack Type</div>
+        <canvas id="bar-chart"></canvas>
+      </div>
+      <div class="panel chart-panel">
+        <div class="panel-title">Incidents Over Time (by hour)</div>
+        <canvas id="line-chart"></canvas>
+      </div>
+    </div>
+
+    <div class="analytics-row">
+      <div class="panel" style="flex:1;">
+        <div class="panel-title">Avg. Time-to-Mitigate by Attack Type</div>
+        <div id="mitigation-table"></div>
+      </div>
+      <div class="panel" style="flex:1;">
+        <div class="panel-title">Model Comparison (RF vs SVM vs MLP)</div>
+        <div id="model-comparison-table"></div>
+      </div>
+    </div>
+
+    <div class="analytics-row">
+      <div class="panel" style="flex:1;">
+        <div class="panel-title">Literature Benchmark</div>
+        <div id="benchmark-note">
+          This project's live test-set figures (pulled from <code>model_comparison.json</code>) are
+          shown alongside the approaches cited in the project's own Literature Review. Fill in the
+          "Reported" columns for each cited paper directly from that section of the synopsis document -
+          figures are intentionally left blank here rather than invented.
+        </div>
+        <table id="benchmark-table">
+          <thead>
+            <tr><th>Approach</th><th>Reported Accuracy</th><th>Reported F1</th><th>Notes</th></tr>
+          </thead>
+          <tbody id="benchmark-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="analytics.js"></script>
+</body>
+</html>
