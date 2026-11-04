@@ -95,6 +95,7 @@ function buildSVG(containerId) {
 
     const midX = (a.x + b.x) / 2;
     const midY = (a.y + b.y) / 2;
+    let breakerEl = null, vLabelEl = null;
 
     if (!controlEdge) {
       // breaker (switch) symbol at the edge midpoint - real SLD convention,
@@ -108,6 +109,7 @@ function buildSVG(containerId) {
       breaker.setAttribute('y', midY - 1.3);
       breaker.setAttribute('transform', `rotate(${angle} ${midX} ${midY})`);
       svg.appendChild(breaker);
+      breakerEl = breaker;
 
       const vLabel = voltageForEdge(a.type, b.type);
       if (vLabel) {
@@ -117,6 +119,7 @@ function buildSVG(containerId) {
         text.setAttribute('y', midY - 2.6);
         text.textContent = vLabel;
         svg.appendChild(text);
+        vLabelEl = text;
       }
     }
 
@@ -126,6 +129,7 @@ function buildSVG(containerId) {
       from: e.from, to: e.to, pathEl: path, length, ax: a.x, ay: a.y, bx: b.x, by: b.y,
       baseParticles: makeParticles(svg, 2, 0.06, 'topo-particle-base'),
       attackParticles: [],
+      breaker: breakerEl, vLabel: vLabelEl,
       active: false,
     });
   });
@@ -199,6 +203,7 @@ function svgEl(tag, attrs, parent) {
 
 /** Everything that visualises the attack itself. Drawn last so it sits above edges and nodes. */
 function buildAttackOverlay(svg) {
+  fxInit(svg);                       // per-attack effect layer (topology_effects.js), under the attacker / tag / callout
   const attacker = svgEl('g', { id: 'topo-attacker', transform: `translate(${ATTACKER_POS.x},${ATTACKER_POS.y})` }, svg);
   svgEl('circle', { r: ATTACKER_R, class: 'topo-attacker-ring' }, attacker);
   svgEl('path', { d: `M -1 -1 L 1 1 M 1 -1 L -1 1`, class: 'topo-attacker-x' }, attacker);
@@ -338,10 +343,20 @@ function placeTag(node, label, cls) {
   return { x: tagX - tagW / 2, y: tagY, w: tagW, h: 4.2 };
 }
 
+/** Same ramp as stageIntensity() in dashboard.js (kept separate so the Attack detail tab is untouched). */
+function topoIntensity(status, stage) {
+  if (stage === 'EXECUTING') return Math.min(1, 0.35 + (status.attack_elapsed_s || 0) * 0.22);
+  if (stage === 'DETECTED') return 1;
+  if (stage === 'MITIGATING') return Math.max(0.08, 1 - (status.mitigation_progress || 0) / 100);
+  return 0;
+}
+
 function updateAttackOverlay(status, hasTarget, scenarioTarget) {
   if (!overlay) return;
   const o = overlay;
   const target = hasTarget ? nodeEls[currentTargetNode] : null;
+  try { topoFxSync(status, target, currentStage, topoIntensity(status, currentStage)); }
+  catch (err) { console.error('topology effect failed', err); }
   o.target = target;
   const streaming = Boolean(target) && (currentStage === 'EXECUTING' || currentStage === 'DETECTED');
   const fading = Boolean(target) && currentStage === 'MITIGATING';
@@ -415,6 +430,8 @@ function placeCallout(status, target, tagRect) {
   const h = 9.4;
   const hit = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
   const obstacles = [tagRect];
+  const fx = topoFxObstacles();
+  if (fx) fx.rects.forEach(r => obstacles.push(r));
   Object.values(nodeEls).forEach(n => {
     const rr = NODE_RADIUS[n.type] + 0.8;
     obstacles.push({ x: n.x - rr, y: n.y - rr, w: rr * 2, h: rr * 2 });
@@ -423,7 +440,7 @@ function placeCallout(status, target, tagRect) {
   });
   const gap = NODE_RADIUS[target.type] + 3;
   // the ATTACKER marker (and its label above it) is an obstacle too
-  obstacles.push({ x: ATTACKER_POS.x - 6, y: ATTACKER_POS.y - ATTACKER_R - 4.8, w: 12, h: ATTACKER_R * 2 + 5.6 });
+  if (!fx || !fx.attackerMoved) obstacles.push({ x: ATTACKER_POS.x - 6, y: ATTACKER_POS.y - ATTACKER_R - 4.8, w: 12, h: ATTACKER_R * 2 + 5.6 });
   // search a grid around the node for the closest position that collides with nothing
   let best = null;
   for (let dx = -64; dx <= 64; dx += 2) {
@@ -490,6 +507,8 @@ function animateTopology(ts) {
       p.el.setAttribute('cy', pt.y + jitter);
     });
   });
+
+  if (fxState.active && topologyVisible()) topoFxFrame(ts, dt);
 
   if (overlay && overlay.arrowGeom && overlay.target) {
     const { x1, y1, x2, y2 } = overlay.arrowGeom;

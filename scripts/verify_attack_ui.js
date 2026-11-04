@@ -43,8 +43,12 @@ const DEBUG_PORT = 9340;
 
 const ATTACKS = ['DDOS', 'MITM', 'REPLAY', 'PORT_SCAN', 'FDI', 'LOAD_ALTER', 'GPS_SPOOF', 'CMD_INJECT',
                  'MALWARE', 'FIRMWARE_TAMPER', 'JAMMING', 'PRIV_ESC'];
-const NODES = ['METERS_D', 'PLANT', 'CTRL', 'FEEDER4', 'METERS_A', 'SUB2', 'FEEDER1', 'METERS_C',
-               'SUB1', 'FEEDER3', 'METERS_B', 'FEEDER2'];       // all 12 nodes, edges first
+// Each attack is only run on nodes its category can really hit (topology.CATEGORY_TARGETS), read from the backend.
+const LEGAL = JSON.parse(require('node:child_process').execFileSync('python3', ['-c',
+  'import json; import topology; from attacks import ATTACKS; ' +
+  'print(json.dumps({k: topology.CATEGORY_TARGETS[a.category] for k, a in ATTACKS.items()}))'],
+  { cwd: path.join(ROOT, 'backend'), encoding: 'utf8' }));
+const legalNode = (attack, i, widthIdx) => { const pool = LEGAL[attack]; return pool[(i * 3 + widthIdx * 5) % pool.length]; };
 const ALL_SCENARIOS = ['recon_to_breach', 'grid_destabilization', 'stealth_takeover'];
 const SCENARIOS = opt('scenarios', '') ? opt('scenarios', '').split(',') : ALL_SCENARIOS;
 const STAGE_SHOT_DELAY = { EXECUTING: 1500, DETECTED: 1500, MITIGATING: 1800, RESOLVED: 1800 };
@@ -174,6 +178,25 @@ const PROBE = `((targetId, scenarioTarget) => {
       const legend = document.getElementById('topo-legend');
       if (legend && hit(r, rect(legend))) out.problems.push(name + ' overlaps the legend');
     }
+  }
+  // per-attack effect layer (topology_effects.js): state, element cap, and keep-clear checks against callout / legend / viewBox
+  const fxLayer = document.getElementById('topo-fx');
+  out.fxActive = fxState.active ? fxState.active.ctx.id : null;
+  out.fxCount = fxLayer ? fxLayer.querySelectorAll('*').length : -1;
+  out.fxSerial = fxState.active ? fxState.active.serial : 0;
+  out.fxText = fxLayer ? [...fxLayer.querySelectorAll('text')].filter((t) => t.style.display !== 'none' && t.parentNode.style.display !== 'none').map((t) => t.textContent).join('|') : '';
+  const drawn = (e) => { const cs = getComputedStyle(e); const r = rect(e); return cs.display !== 'none' && +cs.opacity > 0.05 && r.w > 0 && r.h > 0; };
+  const keep = fxLayer ? [...fxLayer.querySelectorAll('.fx-keepclear')].filter(drawn) : [];
+  const calloutBg = out.calloutOn ? rect(callout.querySelector('.topo-callout-bg')) : null;
+  const legendEl = document.getElementById('topo-legend');
+  keep.forEach((k) => {
+    const kr = rect(k);
+    if (calloutBg && hit(kr, calloutBg)) out.problems.push('callout overlaps effect element ' + (k.getAttribute('class') || k.tagName));
+    if (!inside(kr)) out.problems.push('effect element clipped by the viewBox: ' + (k.getAttribute('class') || k.tagName));
+  });
+  if (fxLayer && legendEl) {
+    const lr = rect(legendEl);
+    [...fxLayer.querySelectorAll('*')].filter(drawn).forEach((e) => { if (hit(rect(e), lr)) out.problems.push('legend overlaps effect element ' + (e.getAttribute('class') || e.tagName)); });
   }
   const legendBox = document.getElementById('topo-legend');
   if (legendBox) {
@@ -325,6 +348,17 @@ class Run {
       this.check(label, /topo-status-attacking/.test(ex.nodeClass), `EXECUTING node class: ${ex.nodeClass}`);
       this.check(label, ex.arrowOn && !ex.arrowFading, 'attacker arrow not shown during EXECUTING');
       this.check(label, ex.attackerOn, 'ATTACKER marker not shown during EXECUTING');
+      for (const [st, p] of [['EXECUTING', ex], ['DETECTED', de], ['MITIGATING', mi]]) {
+        this.check(label, p.fxActive === attack && p.fxCount > 0 && p.fxCount <= 120, `${st}: per-attack effect state (active=${p.fxActive}, elements=${p.fxCount})`);
+      }
+      if (attack === 'FIRMWARE_TAMPER') {            // this effect stays through RESOLVED to show the hash-match check
+        this.check(label, re.fxActive === attack && /HASH MATCH/.test(re.fxText) && !/MISMATCH/.test(re.fxText), `RESOLVED: expected the hash-match check on the map (active=${re.fxActive}, text="${re.fxText}")`);
+        this.check(label, /ROLLING BACK/.test(mi.fxText), `MITIGATING: expected the rollback title (text="${mi.fxText}")`);
+        this.check(label, /MISMATCH/.test(de.fxText), `DETECTED: expected the hash-mismatch badge (text="${de.fxText}")`);
+      } else {
+        this.check(label, re.fxActive === null && re.fxCount === 0, `RESOLVED: effect not torn down (active=${re.fxActive}, elements=${re.fxCount})`);
+      }
+      this.check(label, de.fxSerial === ex.fxSerial, 'effect was rebuilt between EXECUTING and DETECTED (should persist for the incident)');
       this.check(label, ex.calloutOn && ex.calloutText.length > 5, 'callout missing during EXECUTING');
       this.check(label, ex.tagText === 'UNDER ATTACK', `EXECUTING tag: "${ex.tagText}"`);
       this.check(label, ex.bannerLine1 === 'ATTACK IN PROGRESS', `EXECUTING banner: "${ex.bannerLine1}"`);
@@ -354,6 +388,7 @@ class Run {
     this.check(label, tabTest !== null, 'tab-switch test did not run (DETECTED stage missed)');
     this.check(label, maxEventsExecuting >= 1, 'no device-side feed line before DETECTED');
     this.check(label, metricAtDetected && metricAtDetected.value !== '--', `headline metric still "--" at DETECTED (${JSON.stringify(metricAtDetected)})`);
+    this.check(label, after.fxActive === null && after.fxCount === 0, `effect layer not empty after the attack (${after.fxCount})`);
     this.check(label, after.allNormal && !after.tagOn && !after.calloutOn && !after.arrowOn, `map not back to normal afterwards (${after.nodeClass})`);
     const afterUi = (await this.snap()).ui;
     this.check(label, afterUi.atkEnabled && !afterUi.hintVisible, `controls should be unlocked after the attack (enabled=${afterUi.atkEnabled}, hint=${afterUi.hintVisible})`);
@@ -441,7 +476,7 @@ async function main() {
       if (!flag('no-attacks')) {
         for (const [i, attack] of ATTACKS.entries()) {
           if (ONLY && !ONLY.includes(attack)) continue;
-          results.push(await run.runAttack(attack, NODES[(i + wi * 5) % NODES.length]));   // a different node per width too
+          results.push(await run.runAttack(attack, legalNode(attack, i, wi)));   // legal targets only; a different node per width
         }
       }
       if (!flag('no-scenarios') && (!ONLY || opt('scenarios', ''))) for (const id of SCENARIOS) scenarios.push(await run.runScenario(id));

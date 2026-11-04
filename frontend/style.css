@@ -629,3 +629,107 @@ body.role-admin #role-tag{ color:var(--amber); border-color:var(--amber-dim); }
 .topo-leader.stage-RESOLVED{ stroke:var(--green); }
 #controls-lock-hint{ font-size:10.5px; font-weight:600; color:var(--amber); background:var(--amber-faint); border:1px solid rgba(227,165,61,0.35); padding:2px 9px; border-radius:var(--radius-sm); }
 #controls-lock-hint[hidden]{ display:none; }
+
+/* ── per-attack map animations (topology_effects.js) ─────────────── */
+#topo-fx{ pointer-events:none; }
+/* the generic arrow / red edge particles are replaced by the attack-specific effect */
+#topology-svg.fx-on #topo-attack-arrow, #topology-svg.fx-on .topo-particle-attack{ display:none; }
+#topo-attacker.fx-grey .topo-attacker-ring{ fill:rgba(140,160,180,0.12); stroke:var(--text-muted); }
+#topo-attacker.fx-grey .topo-attacker-x, #topo-attacker.fx-grey .topo-attacker-label{ stroke:var(--text-muted); fill:var(--text-muted); }
+.fx-bot{ fill:rgba(224,97,106,0.35); stroke:var(--coral); stroke-width:0.3; }
+.fx-pkt-bad{ fill:var(--coral); filter:drop-shadow(0 0 1px var(--coral)); }
+.fx-pkt-ok{ fill:var(--teal); opacity:0.95; }
+.fx-pkt-copy{ fill:var(--coral); }
+.fx-pkt-hero{ fill:#bff6ef; stroke:var(--teal); stroke-width:0.3; }
+.fx-swell{ fill:var(--coral-faint); stroke:var(--coral-dim); stroke-width:0.3; }
+.fx-ring{ fill:none; stroke:var(--coral); stroke-width:0.35; }
+.fx-shield{ fill:none; stroke:var(--amber); stroke-width:0.6; stroke-dasharray:2.2,1.2; opacity:0; }
+.fx-link-hot{ stroke:rgba(224,97,106,0.5); stroke-width:0.45; stroke-dasharray:1.4,1; fill:none; }
+.fx-tap{ stroke:var(--coral); stroke-width:0.35; stroke-dasharray:0.9,0.8; fill:none; }
+.fx-eye-bg{ fill:rgba(13,22,33,0.94); stroke:var(--coral); stroke-width:0.35; }
+.fx-eye-shape{ fill:none; stroke:var(--coral); stroke-width:0.3; }
+.fx-eye-pupil{ fill:var(--coral); }
+.fx-eye-handle{ stroke:var(--coral); stroke-width:0.45; stroke-linecap:round; }
+.fx-eye-dead .fx-eye-bg, .fx-eye-dead .fx-eye-shape, .fx-eye-dead .fx-eye-handle{ stroke:var(--text-muted); }
+.fx-eye-dead .fx-eye-pupil{ fill:var(--text-muted); }
+.fx-lock-body{ fill:var(--green); stroke:var(--bg); stroke-width:0.2; }
+.fx-lock-shackle{ fill:none; stroke:var(--green); stroke-width:0.45; }
+.fx-text{ font-size:1.8px; font-family:var(--font-mono); font-weight:700; text-anchor:middle; letter-spacing:0.04em; }
+.fx-text-left{ text-anchor:start; }
+.fx-text-green{ fill:var(--green); } .fx-text-coral{ fill:var(--coral); } .fx-text-amber{ fill:var(--amber); }
+.fx-ghost{ fill:none; stroke:var(--coral); stroke-width:0.3; stroke-dasharray:0.7,0.5; }
+.fx-rec-dot{ fill:var(--coral); }
+.fx-rewind-shape{ fill:var(--coral); }
+.fx-xmark-shape{ stroke:var(--coral); stroke-width:0.6; stroke-linecap:round; fill:none; }
+.fx-beam{ fill:var(--amber); }
+.fx-beam-line{ stroke:var(--amber); stroke-width:0.25; }
+.fx-ping{ fill:var(--amber); }
+.fx-port{ stroke:rgba(140,180,210,0.3); stroke-width:0.45; stroke-linecap:round; }
+.fx-port-probe{ stroke:var(--amber); }
+.fx-port-scanned{ stroke:var(--coral-dim); }
+.fx-port-open-amber{ stroke:var(--amber); stroke-width:0.8; }
+.fx-port-open-green{ stroke:var(--green); stroke-width:0.8; }
+.fx-port-blocked{ stroke:var(--text-muted); opacity:0.6; }
+/* Batch B */
+.fx-tamper{ fill:none; stroke:var(--coral); stroke-width:0.4; }
+.fx-pkt-fake{ fill:var(--coral); stroke:#ffd7d9; stroke-width:0.2; }
+.fx-panel{ fill:rgba(13,22,33,0.92); stroke:var(--panel-border-strong); stroke-width:0.25; }
+.fx-dial{ fill:none; stroke:rgba(140,180,210,0.45); stroke-width:0.5; stroke-linecap:round; }
+.fx-needle-true{ stroke:var(--teal); stroke-width:0.5; stroke-linecap:round; }
+.fx-needle-fake{ stroke:var(--coral); stroke-width:0.55; stroke-linecap:round; }
+.fx-hub{ fill:var(--text-secondary); }
+.fx-text-teal{ fill:var(--teal); } .fx-text-muted{ fill:var(--text-muted); } .fx-text-right{ text-anchor:end; }
+.fx-bracket{ fill:none; stroke:var(--amber); stroke-width:0.5; stroke-linecap:round; }
+.fx-quarantine{ stroke:var(--amber); stroke-width:0.9; stroke-dasharray:1.2,0.8; opacity:0.85; }
+.fx-bar{ fill:var(--amber); opacity:0.9; }
+.fx-axis{ stroke:rgba(140,180,210,0.35); stroke-width:0.25; }
+.fx-wave{ fill:none; stroke:var(--coral); stroke-width:0.45; stroke-linejoin:round; }
+.fx-wave-ok{ stroke:var(--green); }
+.fx-pkt-load{ fill:var(--amber); filter:drop-shadow(0 0 1px var(--amber)); }
+.fx-sat-body{ fill:var(--blue); stroke:var(--bg); stroke-width:0.2; }
+.fx-sat-panel{ fill:rgba(91,147,217,0.55); stroke:var(--blue); stroke-width:0.2; }
+.fx-sat-dish{ fill:none; stroke:var(--blue); stroke-width:0.35; }
+.fx-beam-sat{ stroke:var(--teal); stroke-width:0.4; stroke-dasharray:1,0.8; fill:none; }
+.fx-ping-teal{ fill:var(--teal); }
+.fx-clock-face{ fill:rgba(13,22,33,0.92); stroke:var(--text-secondary); stroke-width:0.35; }
+.fx-clock-tick{ stroke:var(--text-muted); stroke-width:0.3; }
+.fx-hand-true{ stroke:var(--teal); stroke-width:0.45; stroke-linecap:round; }
+.fx-hand-drift{ stroke:var(--coral); stroke-width:0.45; stroke-linecap:round; }
+.fx-noise{ fill:none; stroke:var(--coral); stroke-width:0.4; }
+.fx-speck{ fill:var(--text-secondary); }
+.fx-link-broken{ stroke:var(--coral); stroke-width:0.5; stroke-dasharray:0.9,1.2; fill:none; }
+.fx-backup{ stroke:var(--green); stroke-width:0.6; fill:none; opacity:0; filter:drop-shadow(0 0 0.8px var(--green)); }
+/* Batch C */
+.fx-text-white{ fill:#fff; } .fx-text-hash{ font-size:1.5px; }
+.fx-cmd-tag-bg{ fill:var(--coral); }
+.fx-pkt-cmd{ fill:var(--coral); stroke:#ffd7d9; stroke-width:0.2; }
+.fx-brk-term{ fill:var(--text-secondary); }
+.fx-brk-blade{ stroke:var(--text-primary); stroke-width:0.6; stroke-linecap:round; }
+.fx-gate-bar{ fill:var(--green); }
+.fx-gate-check{ fill:none; stroke:var(--green); stroke-width:0.5; stroke-linecap:round; stroke-linejoin:round; }
+.fx-infect-tint{ fill:var(--violet); stroke:var(--violet); stroke-width:0.3; }
+.fx-infect-line{ stroke:var(--violet); stroke-width:0.6; stroke-dasharray:1,0.6; }
+.fx-exfil-line{ stroke:var(--violet); stroke-width:0.3; stroke-dasharray:0.8,0.8; }
+.fx-exfil{ fill:var(--violet); filter:drop-shadow(0 0 1px var(--violet)); }
+.fx-virus-core{ fill:var(--violet); stroke:var(--green); stroke-width:0.3; }
+.fx-virus-spike{ stroke:var(--violet); stroke-width:0.45; }
+.fx-virus-spike-end{ fill:var(--green); }
+.fx-virus-dead .fx-virus-core, .fx-virus-dead .fx-virus-spike-end{ fill:var(--text-muted); stroke:none; }
+.fx-virus-dead .fx-virus-spike{ stroke:var(--text-muted); }
+.fx-chip{ fill:#1b2735; stroke:var(--text-secondary); stroke-width:0.35; }
+.fx-chip-pin{ stroke:var(--text-secondary); stroke-width:0.35; }
+.fx-fw-check{ fill:none; stroke:var(--green); stroke-width:0.7; stroke-linecap:round; stroke-linejoin:round; }
+.fx-rollback{ fill:none; stroke:var(--amber); stroke-width:0.6; stroke-linecap:round; }
+.fx-rollback-head{ fill:var(--amber); }
+.fx-bit{ stroke:none; } .fx-bit-hi{ fill:var(--coral); } .fx-bit-lo{ fill:rgba(224,97,106,0.28); } .fx-bit-ok{ fill:var(--green); }
+.fx-lock-body-dk{ fill:#1b2735; stroke:var(--coral); stroke-width:0.4; }
+.fx-lock-shackle-dk{ fill:none; stroke:var(--coral); stroke-width:0.6; }
+.fx-lock-key{ fill:var(--coral); }
+.fx-crack{ fill:none; stroke:var(--amber); stroke-width:0.35; stroke-linejoin:round; opacity:0; }
+.fx-key{ fill:var(--amber); filter:drop-shadow(0 0 1px var(--amber)); }
+.fx-lock-open .fx-lock-body-dk, .fx-lock-open .fx-lock-shackle-dk{ stroke:var(--amber); }
+.fx-lock-shut .fx-lock-body-dk, .fx-lock-shut .fx-lock-shackle-dk{ stroke:var(--green); }
+.fx-seg{ fill:rgba(140,180,210,0.18); } .fx-seg-on{ fill:var(--amber); } .fx-seg-hot{ fill:var(--coral); }
+@media (prefers-reduced-motion: reduce){
+  #topo-fx *{ animation:none !important; transition:none !important; }
+}

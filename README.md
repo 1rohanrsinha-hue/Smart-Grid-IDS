@@ -303,6 +303,39 @@ MITIGATING -> RESOLVED` state machine itself is unchanged.
 `DETECTED_HOLD_SECONDS` and `RESOLVED_HOLD_SECONDS` are now 4 s so each
 stage stays on screen. Tests for this are in `tests/test_attack_visibility.py`.
 
+### Per-attack map animations
+
+The Grid topology map animates *what* each attack is doing, not just that a node is under attack.
+Effects live in `frontend/topology_effects.js` (pure SVG + `requestAnimationFrame`, loaded before
+`topology.js`) as an `ATTACK_EFFECTS` map keyed by attack id; each has `setup / update / teardown`.
+They follow the existing stage lifecycle: attacking look during EXECUTING/DETECTED (density follows
+intensity), a "being neutralised" look during MITIGATING, and a full teardown on RESOLVED/SECURE.
+
+| Attack | Map animation |
+|---|---|
+| DDOS | botnet swarm, dense converging flood, swelling node + shockwave rings; mitigation raises a shield ring that blocks and fades the flood |
+| MITM | attacker moves onto the feed link, traffic flows through it while copies go to an eye icon over a dashed tap; mitigation pins the cert (padlock) and ejects the attacker |
+| REPLAY | ~1.5 s CAPTURE (REC) of a legitimate packet, then hollow ghost copies with a stale timestamp are replayed at the node; mitigation rejects them with a nonce-check X |
+| PORT_SCAN | radar sweep beam, sparse probe pings, port ticks light up in turn with a few "open" (amber/green); mitigation turns the ticks grey behind a firewall ring |
+| FDI | legit packets on the feed link mutate colour/shape mid-transit; a TRUE vs FAKE gauge (FAKE needle = the real injected voltage from the evidence) diverges; mitigation puts a quarantine bracket on the feed and snaps the needle back ("last validated") |
+| LOAD_ALTER | load bars and a distorted waveform swing wildly while the link surges and throttles in waves (setpoint text from the evidence); mitigation flattens everything to steady |
+| GPS_SPOOF | a satellite beams to the node while a rogue beam comes from the attacker; a clock's drifting hand shows the real offset from the evidence; mitigation cuts the rogue beam and the clock locks back ("holdover") |
+| JAMMING | expanding noise rings and static, a flickering broken feed link, packets dying before the node; mitigation lights a backup channel parallel to the real feed link |
+| CMD_INJECT | forged angular `CMD` packets are injected from the attacker onto the control link (the CTRL link when the node has one, else its feed link) while a breaker symbol at the node flips open/closed; mitigation adds an allow-list gate that rejects the forged packets and locks the breaker closed |
+| MALWARE | pulsing violet/green virus glyph on the node, infection tint spreading along its outgoing edges to neighbours (kept inside the map), exfil particles streaming back to the attacker; mitigation isolates the node (quarantine ring) and the spread retracts |
+| FIRMWARE_TAMPER | chip with glitching bits and a `HASH MISMATCH` title (truncated golden/device hashes from the evidence); mitigation shows a rollback arrow while the bits revert in step with the real mitigation progress; the effect stays through RESOLVED to show `HASH MATCH` only when the evidence hashes are equal, next to the existing RESTORED callout |
+| PRIV_ESC | lock on the node, key particles knock and bounce off, the lock cracks as the achieved privilege rises; the 5-segment privilege meter appears only when the evidence has a level (otherwise a non-numeric, time-based crack); mitigation revokes the session, the meter drops and the lock re-closes |
+
+Open ports on the PORT_SCAN ring come only from the real scan's evidence (`open_ports_found`); anything numeric on the map comes from `real_attack_evidence`, otherwise labels are plain words.
+
+Notes: effects are bounded (<= 120 SVG elements, elements reused, never re-created per frame), paused while
+the map is hidden, and respect `prefers-reduced-motion` (same icons and labels, far fewer and slower
+particles). `/api/status` exposes no incident id, so a new incident is detected by a change of
+(attack, target node), `attack_elapsed_s` going backwards, or the stage regressing, and the effect is
+always torn down whenever the stage is RESOLVED/NONE. Tests: `tests/test_topology_fx.py` (runs
+`tests/topology_fx_test.js` in Node; skipped without Node). Screenshots per attack and stage:
+`node scripts/verify_attack_ui.js --out docs/attack_fx` (all 12 attacks plus the 3 scenarios, each on a legal target for its category).
+
 ### How to verify the attack visibility
 
 `scripts/verify_attack_ui.js` drives a headless Chrome (DevTools protocol, no npm
